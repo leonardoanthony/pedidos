@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Pedido</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .not-found {
+      color: red;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .subtotal {
+      text-align: right;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .pagamentos-table {
+      margin-top: 10px;
+    }
+
+    .pagamentos-table td {
+      text-align: left;
+    }
+
+    #pix {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+      color: #555;
+    }
+
+    #copyPix {
+      cursor: pointer;
+      color: #007BFF;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Consulta de Pedido</h2>
+    <input type="number" id="nameInput" maxlength="4" placeholder="Digite seu cod (ex: 4321)">
+    <button onclick="buscarPedido()">Buscar</button>
+    <div id="resultado"></div>
+    <div id="pix">
+      <b>Pix:</b> leonardoanthony8@gmail.com <span onclick="copiarTexto()" id="copyPix">(copiar)</span>
+    </div>
+  </div>
+
+  <script>
+    const pedidos = [
+      {
+        code: 3425,
+        nome: "Denis",
+        status: "Entregue",
+        itens: [
+          { item: "Azul BB", tamanho: "M", quantidade: 2, valorUnitario: 40 },
+          { item: "Preto", tamanho: "M", quantidade: 2, valorUnitario: 40 },
+          { item: "Off White", tamanho: "M", quantidade: 1, valorUnitario: 40 },
+          { item: "Goiaba", tamanho: "M", quantidade: 2, valorUnitario: 40 }
+        ],
+        pagamentos: [
+          { mes: "Maio", valor: 80, status: "Em Aberto" },
+          { mes: "Junho", valor: 100, status: "Em Aberto" },
+          { mes: "Julho", valor: 100, status: "Em Aberto" }
+        ]
+      },
+      {
+        code: 4658,
+        nome: "Riva",
+        status: "Entregue",
+        itens: [
+          { item: "Cinza Escuro", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+        ],
+        pagamentos: [
+          { mes: "Maio", valor: 40, status: "Em Aberto" },
+        ]
+      },
+      {
+        code: 5373,
+        nome: "Gabriel",
+        status: "Entregue",
+        itens: [
+          { item: "Verde acqua", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+          { item: "Azul BB", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+          { item: "Verde claro", tamanho: "M", quantidade: 1, valorUnitario: 40 },
+        ],
+        pagamentos: [
+          { mes: "Maio", valor: 60, status: "Em Aberto" },
+          { mes: "Junho", valor: 60, status: "Em Aberto" },
+        ]
+      },
+      {
+        code: 4812,
+        nome: "João",
+        status: "Não Entregue",
+        itens: [
+          { item: "Preta", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+          { item: "Azul Marinho", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+        ],
+        pagamentos: [
+          { mes: "Maio", valor: 40, status: "Em Aberto" },
+          { mes: "Junho", valor: 40, status: "Em Aberto" },
+        ]
+      },
+      {
+        code: 1152,
+        nome: "Andréia",
+        status: "Entregue",
+        itens: [
+          { item: "Verde Acqua", tamanho: "P", quantidade: 1, valorUnitario: 40 },
+          { item: "Preta", tamanho: "P", quantidade: 1, valorUnitario: 40 },
+        ],
+        pagamentos: [
+          { mes: "Maio", valor: 40, status: "Em Aberto" },
+          { mes: "Junho", valor: 40, status: "Em Aberto" },
+        ]
+      },
+    ];
+
+    function buscarPedido() {
+      const code = document.getElementById('nameInput').value.trim();
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.innerHTML = "";
+
+      const pedido = pedidos.find(p => p.code == code);
+
+      if (!pedido) {
+        resultadoDiv.innerHTML = `<p class="not-found">Pedido não encontrado.</p>`;
+        return;
+      }
+
+      let totalGeral = 0;
+      const linhasItens = pedido.itens.map(i => {
+        const total = i.quantidade * i.valorUnitario;
+        totalGeral += total;
+        return `
+          <tr>
+            <td>${i.item}</td>
+            <td>${i.tamanho}</td>
+            <td>${i.quantidade}</td>
+            <td>R$ ${i.valorUnitario.toFixed(2)}</td>
+            <td>R$ ${total.toFixed(2)}</td>
+          </tr>`;
+      }).join('');
+
+      const tabelaItens = `
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Tamanho</th>
+              <th>Quantidade</th>
+              <th>Valor Unitário</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${linhasItens}
+          </tbody>
+        </table>
+        <p class="subtotal">Subtotal: R$ ${totalGeral.toFixed(2)}</p>
+      `;
+
+      const tabelaPagamentos = `
+        <table class="pagamentos-table">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th>Valor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${pedido.pagamentos.map(p => `
+              <tr>
+                <td>${p.mes}</td>
+                <td>R$ ${p.valor.toFixed(2)}</td>
+                <td>${p.status}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+
+      resultadoDiv.innerHTML = `
+        <h3>🧾 Nota de Pedido – ${pedido.nome}</h3>
+        ${tabelaItens}
+        <p class="status">📦 Status do Pedido: ${pedido.status}</p>
+        <h4>💳 Pagamentos:</h4>
+        ${tabelaPagamentos}
+      `;
+    }
+
+    document.getElementById("nameInput").addEventListener("keypress", function (e) {
+      if (e.key === "Enter") buscarPedido();
+    });
+
+    function copiarTexto() {
+      const texto = "leonardoanthony8@gmail.com";
+      navigator.clipboard.writeText(texto).then(() => {
+        alert("Texto copiado: " + texto);
+      }).catch(err => {
+        console.error('Erro ao copiar o texto: ', err);
+      });
+    }
+  </script>
+</body>
+</html>
