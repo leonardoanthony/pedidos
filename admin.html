@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciador de Pedidos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .login-box {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .login-box input {
+      width: calc(100% - 24px);
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .tab-button {
+      padding: 10px 20px;
+      background: #ccc;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .tab-button.active {
+      background-color: #333;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #333;
+      color: white;
+    }
+
+    .status-entregue {
+      color: green;
+      font-weight: bold;
+    }
+
+    .status-pendente {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .status-atrasado {
+      color: red;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tela de login -->
+  <div class="login-box" id="login-box">
+    <h2>🔒 Acesso Restrito</h2>
+    <input type="text" id="usuario" placeholder="Usuário">
+    <input type="password" id="senha" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <p class="error" id="erro-login"></p>
+  </div>
+
+  <!-- Conteúdo protegido -->
+  <div id="conteudo" class="hidden">
+
+    <h1>📋 Gerenciador de Pedidos</h1>
+
+    <div class="tabs">
+      <button class="tab-button active" onclick="mostrarAba('entregas', event)">📦 Entregas</button>
+      <button class="tab-button" onclick="mostrarAba('pagamentos', event)">💰 Pagamentos</button>
+    </div>
+
+    <!-- Aba de Entregas -->
+    <div id="entregas" class="tab-content active">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Status da Entrega</th>
+            <th>Valor Total</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-entregas"></tbody>
+      </table>
+    </div>
+
+    <!-- Aba de Pagamentos -->
+    <div id="pagamentos" class="tab-content">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Mês</th>
+            <th>Valor</th>
+            <th>Situação</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-pagamentos"></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script src="pedidos.js"></script>
+  <script>
+    
+
+    function calcularTotal(itens) {
+      return itens.reduce((total, item) => total + item.quantidade * item.valorUnitario, 0);
+    }
+
+    function login() {
+      const usuario = document.getElementById("usuario").value.trim().toLowerCase();
+      const senha = document.getElementById("senha").value.trim().toLowerCase();
+      const erro = document.getElementById("erro-login");
+
+      if (usuario === "leonardo" && senha === "fernanda") {
+        document.getElementById("login-box").classList.add("hidden");
+        document.getElementById("conteudo").classList.remove("hidden");
+        carregarPedidos();
+      } else {
+        erro.textContent = "Usuário ou senha incorretos.";
+      }
+    }
+
+    function mostrarAba(id, event) {
+      const abas = document.querySelectorAll(".tab-content");
+      const botoes = document.querySelectorAll(".tab-button");
+      abas.forEach(aba => aba.classList.remove("active"));
+      botoes.forEach(botao => botao.classList.remove("active"));
+
+      document.getElementById(id).classList.add("active");
+      event.target.classList.add("active");
+    }
+
+    function carregarPedidos() {
+      const tabelaEntregas = document.getElementById("tabela-entregas");
+      const tabelaPagamentos = document.getElementById("tabela-pagamentos");
+
+      pedidos.forEach(pedido => {
+        // Entregas
+        const trEntrega = document.createElement("tr");
+        const statusClass = pedido.status.toLowerCase() === "entregue"
+          ? "status-entregue"
+          : pedido.status.toLowerCase() === "atrasado"
+            ? "status-atrasado"
+            : "status-pendente";
+
+        trEntrega.innerHTML = `
+          <td>${pedido.code}</td>
+          <td>${pedido.nome}</td>
+          <td class="${statusClass}">${pedido.status}</td>
+          <td>R$ ${calcularTotal(pedido.itens).toFixed(2)}</td>
+          <td><a href="https://seusite.com/pedido?cod=${pedido.cod}" target="_blank">🔗 Ver</a></td>
+        `;
+        tabelaEntregas.appendChild(trEntrega);
+
+        // Pagamentos
+        pedido.pagamentos.forEach(pag => {
+          const trPag = document.createElement("tr");
+          const statusClassPag = pag.status === "Pago"
+            ? "status-entregue"
+            : pag.status === "Atrasado"
+              ? "status-atrasado"
+              : "status-pendente";
+
+          trPag.innerHTML = `
+            <td>${pedido.code}</td>
+            <td>${pedido.nome}</td>
+            <td>${pag.mes}</td>
+            <td>R$ ${pag.valor.toFixed(2)}</td>
+            <td class="${statusClassPag}">${pag.status}</td>
+          `;
+          tabelaPagamentos.appendChild(trPag);
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>
