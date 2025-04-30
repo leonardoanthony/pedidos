@@ -101,6 +101,9 @@
       color: #007BFF;
       text-decoration: underline;
     }
+    .overflow-x-scroll {
+      overflow-x: scroll;
+    }
   </style>
 </head>
 <body>
@@ -166,8 +169,8 @@
           { item: "Azul Marinho", tamanho: "G", quantidade: 1, valorUnitario: 40 },
         ],
         pagamentos: [
-          { mes: "Maio", valor: 40, status: "Em Aberto" },
-          { mes: "Junho", valor: 40, status: "Em Aberto" },
+          { mes: "Maio", valor: 40, status: "Efetuado" },
+          { mes: "Junho", valor: 40, status: "Efetuado" },
         ]
       },
       {
@@ -212,6 +215,7 @@
       }).join('');
 
       const tabelaItens = `
+        <div class="overflow-x-scroll">
         <table>
           <thead>
             <tr>
@@ -226,6 +230,7 @@
             ${linhasItens}
           </tbody>
         </table>
+        </div>
         <p class="subtotal">Subtotal: R$ ${totalGeral.toFixed(2)}</p>
       `;
 
