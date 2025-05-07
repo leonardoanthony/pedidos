@@ -23,7 +23,7 @@ const pedidos = [
         { item: "Cinza Escuro", tamanho: "G", quantidade: 1, valorUnitario: 40 },
       ],
       pagamentos: [
-        { mes: "Maio", valor: 40, status: "Em Aberto" },
+        { mes: "Maio", valor: 40, status: "Pago" },
       ]
     },
     {
@@ -62,7 +62,7 @@ const pedidos = [
         { item: "Preta", tamanho: "P", quantidade: 1, valorUnitario: 40 },
       ],
       pagamentos: [
-        { mes: "Maio", valor: 40, status: "Em Aberto" },
+        { mes: "Maio", valor: 40, status: "Pago" },
         { mes: "Junho", valor: 40, status: "Em Aberto" },
       ]
     },
