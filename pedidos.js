@@ -36,7 +36,7 @@ const pedidos = [
         { item: "Goiaba", tamanho: "P", quantidade: 1, valorUnitario: 40 },
       ],
       pagamentos: [
-        { mes: "Maio", valor: 60, status: "Em Aberto" },
+        { mes: "Maio", valor: 60, status: "Pago" },
         { mes: "Junho", valor: 60, status: "Em Aberto" },
       ]
     },
