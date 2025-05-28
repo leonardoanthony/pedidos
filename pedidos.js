@@ -6,13 +6,13 @@ const pedidos = [
       itens: [
         { item: "Azul BB", tamanho: "M", quantidade: 2, valorUnitario: 40 },
         { item: "Preto", tamanho: "M", quantidade: 2, valorUnitario: 40 },
-        { item: "Off White", tamanho: "M", quantidade: 1, valorUnitario: 40 },
+        { item: "Off White", tamanho: "M", quantidade: 2, valorUnitario: 40 },
         { item: "Goiaba", tamanho: "M", quantidade: 2, valorUnitario: 40 }
       ],
       pagamentos: [
         { mes: "Maio", valor: 80, status: "Em Aberto" },
-        { mes: "Junho", valor: 100, status: "Em Aberto" },
-        { mes: "Julho", valor: 100, status: "Em Aberto" }
+        { mes: "Junho", valor: 120, status: "Em Aberto" },
+        { mes: "Julho", valor: 120, status: "Em Aberto" }
       ]
     },
     {
