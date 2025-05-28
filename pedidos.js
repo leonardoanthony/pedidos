@@ -32,12 +32,14 @@ const pedidos = [
       status: "Entregue",
       itens: [
         { item: "Verde acqua", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+        { item: "Verde acqua", tamanho: "M", quantidade: 1, valorUnitario: 40 },
         { item: "Azul BB", tamanho: "G", quantidade: 1, valorUnitario: 40 },
         { item: "Goiaba", tamanho: "P", quantidade: 1, valorUnitario: 40 },
       ],
       pagamentos: [
         { mes: "Maio", valor: 60, status: "Pago" },
         { mes: "Junho", valor: 60, status: "Em Aberto" },
+        { mes: "Julho", valor: 40, status: "Em Aberto" },
       ]
     },
     {
