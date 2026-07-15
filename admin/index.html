@@ -3,247 +3,930 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gerenciador de Pedidos</title>
+  <title>Polar Bear · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #111111;
+      --primary-light: #2C2C2C;
+      --secondary: #F5F5F5;
+      --background: #FFFFFF;
+      --accent: #6A8D73;
+      --accent-dark: #57715D;
+      --text: #111111;
+      --text-light: #666666;
+      --border: #E9E9E9;
+      --success: #30B566;
+      --warning: #F2B544;
+      --danger: #E45D5D;
+      --radius-xs: 6px;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 32px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
+      --shadow-md: 0 10px 30px rgba(0,0,0,.08);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.12);
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 40px;
+      --space-xl: 64px;
+      --sidebar-width: 250px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      padding: 20px;
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+      color: var(--text);
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .hidden { display: none !important; }
 
-    .hidden {
-      display: none;
-    }
-
+    /* LOGIN */
     .login-box {
       max-width: 400px;
-      margin: 50px auto;
-      padding: 30px;
+      margin: 80px auto;
+      padding: var(--space-md);
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
     }
-
+    .login-box h2 { font-size: 24px; font-weight: 600; text-align: center; margin-bottom: var(--space-md); }
     .login-box input {
-      width: calc(100% - 24px);
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 16px;
+      width: 100%;
+      padding: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: 'Inter', sans-serif;
     }
-
+    .login-box input:focus { outline: none; border-color: var(--accent); }
     .login-box button {
       width: 100%;
-      padding: 10px;
-      background-color: #333;
+      padding: var(--space-sm);
+      background: var(--primary);
       color: white;
       font-size: 16px;
+      font-weight: 600;
       border: none;
+      border-radius: 999px;
       cursor: pointer;
-      border-radius: 5px;
+      font-family: 'Inter', sans-serif;
+      transition: .25s;
     }
+    .login-box button:hover { background: var(--primary-light); }
+    .error { color: var(--danger); text-align: center; margin-top: var(--space-sm); }
 
-    .tabs {
+    /* LAYOUT */
+    .app-layout {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      justify-content: center;
+      min-height: 100vh;
     }
 
-    .tab-button {
-      padding: 10px 20px;
-      background: #ccc;
-      border: none;
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      margin-bottom: var(--space-lg);
+      padding: var(--space-xs) 0;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: var(--space-xs); flex: 1; }
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      color: rgba(255,255,255,.65);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
       cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .tab-button.active {
-      background-color: #333;
-      color: white;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    table {
+      transition: .2s;
+      border: none;
+      background: none;
       width: 100%;
-      border-collapse: collapse;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    th, td {
-      padding: 12px 15px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      font-family: 'Inter', sans-serif;
+    }
+    .sidebar-link:hover { color: white; background: rgba(255,255,255,.08); }
+    .sidebar-link.active { color: white; background: var(--primary-light); }
+    .sidebar-link .emoji { font-size: 18px; width: 24px; text-align: center; }
+
+    /* MAIN */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      padding: var(--space-md) var(--space-lg);
+      min-height: 100vh;
     }
 
+    /* TOP BAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+    }
+    .topbar h1 { font-size: 28px; font-weight: 700; }
+    .topbar-search {
+      position: relative;
+      width: 320px;
+    }
+    .topbar-search input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      background: white;
+      transition: .2s;
+    }
+    .topbar-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(106,141,115,.15); }
+    .topbar-search .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      opacity: .4;
+    }
+
+    /* CARDS */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .metric-card {
+      background: white;
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .metric-card .label { font-size: 13px; color: var(--text-light); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; margin-bottom: var(--space-xs); }
+    .metric-card .value { font-size: 28px; font-weight: 700; }
+    .metric-card .sub { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+
+    /* SECTION HEADER */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-sm);
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .section-header h2 { font-size: 20px; font-weight: 600; }
+    .section-controls {
+      display: flex;
+      gap: var(--space-xs);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .section-controls select, .section-controls input {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      background: white;
+    }
+    .section-controls select:focus, .section-controls input:focus { outline: none; border-color: var(--accent); }
+
+    .btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-accent:hover { background: var(--accent-dark); }
+    .btn-outline { background: white; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--text); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { opacity: .85; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+    /* TABLE */
+    .table-wrap {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
     th {
-      background-color: #333;
+      background: var(--primary);
       color: white;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      cursor: pointer;
+      user-select: none;
+    }
+    th:hover { background: var(--primary-light); }
+    th .sort-icon { margin-left: 4px; opacity: .5; font-size: 11px; }
+    tr:last-child td { border-bottom: none; }
+    tr.clickable { cursor: pointer; }
+    tr.clickable:hover { background: var(--secondary); }
+
+    /* BADGE */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge.success { background: #EAF8EF; color: var(--success); }
+    .badge.warning { background: #FFF7E6; color: var(--warning); }
+    .badge.danger { background: #FFECEC; color: var(--danger); }
+    .badge.info { background: #E8F0FE; color: #1A73E8; }
+
+    /* EXPANDED ROW */
+    .expanded-row {
+      display: none;
+      background: #fafafa;
+    }
+    .expanded-row.open { display: table-row; }
+    .expanded-row td { padding: var(--space-md); }
+    .expand-inner {
+      max-width: 700px;
+    }
+    .expand-inner h3 { font-size: 16px; margin-bottom: var(--space-sm); }
+    .expand-inner .field {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .expand-inner .field label { font-weight: 600; font-size: 13px; min-width: 100px; color: var(--text-light); }
+    .expand-inner .field input, .expand-inner .field select {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      flex: 1;
+      min-width: 150px;
+    }
+    .expand-inner .field input:focus, .expand-inner .field select:focus { outline: none; border-color: var(--accent); }
+    .expand-inner .mini-table { width: 100%; margin: var(--space-sm) 0; }
+    .expand-inner .mini-table th { background: var(--primary-light); font-size: 12px; padding: 8px 12px; }
+    .expand-inner .mini-table td { padding: 8px 12px; font-size: 13px; }
+
+    /* PRODUTOS GRID */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-sm);
+    }
+    .prod-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .prod-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .prod-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .prod-card .prod-body { padding: var(--space-sm); }
+    .prod-card .prod-body h3 { font-size: 15px; font-weight: 600; margin-bottom: var(--space-xs); }
+    .prod-card .prod-body .cores { display: flex; gap: 6px; margin-bottom: var(--space-xs); }
+    .prod-card .prod-body .color-swatch {
+      width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--border);
+    }
+    .prod-card .prod-body .tamanhos { font-size: 12px; color: var(--text-light); }
+    .prod-card .prod-body .tamanhos span { display: inline-block; background: var(--secondary); padding: 2px 8px; border-radius: 999px; margin: 2px; font-size: 11px; }
+
+    /* PAGAMENTOS RESUMO */
+    .pagamento-resumo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--space-sm);
+      margin-bottom: var(--space-sm);
     }
 
-    .status-entregue {
-      color: green;
-      font-weight: bold;
+    /* INLINE TOGGLE STATUS */
+    .status-toggle {
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: .2s;
     }
+    .status-toggle:hover { border-color: var(--accent); }
 
-    .status-pendente {
-      color: orange;
-      font-weight: bold;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
-    .status-atrasado {
-      color: red;
-      font-weight: bold;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 60px;
+        padding: var(--space-sm) var(--space-xs);
+      }
+      .sidebar-logo { font-size: 14px; letter-spacing: 2px; text-align: center; }
+      .sidebar-link { justify-content: center; padding: 12px 8px; }
+      .sidebar-link .nav-text { display: none; }
+      .sidebar-link .emoji { margin: 0; }
+      .main-content { margin-left: 60px; padding: var(--space-sm); }
+      .topbar { flex-direction: column; align-items: stretch; gap: var(--space-xs); }
+      .topbar-search { width: 100%; }
+      .metrics { grid-template-columns: 1fr; }
+      .prod-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Tela de login -->
-  <div class="login-box" id="login-box">
-    <h2>🔒 Acesso Restrito</h2>
-    <input type="text" id="usuario" placeholder="Usuário">
-    <input type="password" id="senha" placeholder="Senha">
-    <button onclick="login()">Entrar</button>
-    <p class="error" id="erro-login"></p>
+<div class="login-box" id="login-box">
+  <h2>Acesso Restrito</h2>
+  <input type="text" id="usuario" placeholder="Usuário" onkeydown="if(event.key==='Enter')login()">
+  <input type="password" id="senha" placeholder="Senha" onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">Entrar</button>
+  <p class="error" id="erro-login"></p>
+</div>
+
+<div id="conteudo" class="hidden">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">POLAR BEAR</div>
+      <nav class="sidebar-nav">
+        <button class="sidebar-link active" onclick="navegar('dashboard',this)">
+          <span class="emoji">📊</span><span class="nav-text">Dashboard</span>
+        </button>
+        <button class="sidebar-link" onclick="navegar('clientes',this)">
+          <span class="emoji">👥</span><span class="nav-text">Clientes</span>
+        </button>
+        <button class="sidebar-link" onclick="navegar('pedidos',this)">
+          <span class="emoji">📦</span><span class="nav-text">Pedidos</span>
+        </button>
+        <button class="sidebar-link" onclick="navegar('pagamentos',this)">
+          <span class="emoji">💰</span><span class="nav-text">Pagamentos</span>
+        </button>
+        <button class="sidebar-link" onclick="navegar('produtos',this)">
+          <span class="emoji">👕</span><span class="nav-text">Produtos</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="topbar">
+        <h1 id="section-title">Dashboard</h1>
+        <div class="topbar-search">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="global-search" placeholder="Pesquisar..." oninput="buscaGlobal(this.value)">
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <section id="section-dashboard" class="section active">
+        <div class="metrics" id="dashboard-metrics"></div>
+        <div class="section-header"><h2>Pedidos Recentes</h2></div>
+        <div class="table-wrap" id="dashboard-pedidos"></div>
+        <div class="section-header" style="margin-top:var(--space-md)"><h2>Próximos Pagamentos</h2></div>
+        <div class="table-wrap" id="dashboard-pagamentos"></div>
+      </section>
+
+      <!-- CLIENTES -->
+      <section id="section-clientes" class="section">
+        <div class="section-header">
+          <h2>Clientes</h2>
+          <div class="section-controls">
+            <input type="text" id="filtro-cliente" placeholder="Buscar cliente..." oninput="renderClientes()">
+            <button class="btn btn-accent" onclick="novoCliente()">+ Novo Cliente</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="ordenarClientes('nome')">Nome <span class="sort-icon">↕</span></th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+                <th>Frete</th>
+                <th style="width:80px">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-clientes"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PEDIDOS -->
+      <section id="section-pedidos" class="section">
+        <div class="section-header">
+          <h2>Pedidos</h2>
+          <div class="section-controls">
+            <input type="text" id="filtro-pedido" placeholder="Código ou cliente..." oninput="renderPedidos()">
+            <select id="filtro-status-pedido" onchange="renderPedidos()">
+              <option value="">Todos os status</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Em Entrega">Em Entrega</option>
+              <option value="Entregue">Entregue</option>
+              <option value="Atrasado">Atrasado</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="ordenarPedidos('code')">Código <span class="sort-icon">↕</span></th>
+                <th onclick="ordenarPedidos('nome')">Cliente <span class="sort-icon">↕</span></th>
+                <th onclick="ordenarPedidos('data')">Data <span class="sort-icon">↕</span></th>
+                <th>Status</th>
+                <th onclick="ordenarPedidos('valor')">Total <span class="sort-icon">↕</span></th>
+              </tr>
+            </thead>
+            <tbody id="tabela-pedidos"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PAGAMENTOS -->
+      <section id="section-pagamentos" class="section">
+        <div class="pagamento-resumo" id="resumo-pagamentos"></div>
+        <div class="section-header">
+          <h2>Pagamentos</h2>
+          <div class="section-controls">
+            <input type="text" id="filtro-pagamento" placeholder="Buscar cliente..." oninput="renderPagamentos()">
+            <select id="filtro-status-pagamento" onchange="renderPagamentos()">
+              <option value="">Todos</option>
+              <option value="Pago">Pago</option>
+              <option value="Em Aberto">Em Aberto</option>
+              <option value="Atrasado">Atrasado</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Cliente</th>
+                <th onclick="ordenarPagamentos('mes')">Mês <span class="sort-icon">↕</span></th>
+                <th onclick="ordenarPagamentos('valor')">Valor <span class="sort-icon">↕</span></th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-pagamentos"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PRODUTOS -->
+      <section id="section-produtos" class="section">
+        <div class="section-header">
+          <h2>Produtos</h2>
+          <div class="section-controls">
+            <input type="text" id="filtro-produto" placeholder="Buscar produto..." oninput="renderProdutos()">
+          </div>
+        </div>
+        <div class="prod-grid" id="grid-produtos"></div>
+      </section>
+
+    </main>
   </div>
+</div>
 
-  <!-- Conteúdo protegido -->
-  <div id="conteudo" class="hidden">
+<script src="../pedidos.js"></script>
+<script src="../clientes.js"></script>
+<script src="../produtos.js"></script>
+<script>
+/* ==================== HELPERS ==================== */
+function calcTotal(itens) {
+  return itens.reduce((t,i) => t + i.quantidade * i.valorUnitario, 0);
+}
+function statusClass(s) {
+  const st = s.toLowerCase();
+  if (st==='entregue'||st==='pago') return 'success';
+  if (st==='atrasado'||st==='em aberto') return 'danger';
+  return 'warning';
+}
+function fmtData(d) {
+  if (!d) return '-';
+  const p = d.split('-');
+  return `${p[2]||'??'}/${p[1]||'??'}/${p[0]||'??'}`;
+}
+function fmtValor(v) { return 'R$ '+v.toFixed(2); }
+function nomeCliente(nome) {
+  const c = clientes.find(cl => cl.nome.toLowerCase() === nome.toLowerCase());
+  return c ? c : null;
+}
 
-    <h1>📋 Gerenciador de Pedidos</h1>
+/* ==================== LOGIN ==================== */
+function login() {
+  const u = document.getElementById('usuario').value.trim().toLowerCase();
+  const s = document.getElementById('senha').value.trim().toLowerCase();
+  const erro = document.getElementById('erro-login');
+  if (u === 'leonardo' && s === 'fernanda') {
+    document.getElementById('login-box').classList.add('hidden');
+    document.getElementById('conteudo').classList.remove('hidden');
+    carregarAdmin();
+  } else {
+    erro.textContent = 'Usuário ou senha incorretos.';
+  }
+}
 
-    <div class="tabs">
-      <button class="tab-button active" onclick="mostrarAba('entregas', event)">📦 Entregas</button>
-      <button class="tab-button" onclick="mostrarAba('pagamentos', event)">💰 Pagamentos</button>
-    </div>
+/* ==================== NAVEGAÇÃO ==================== */
+function navegar(secao, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-'+secao).classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('global-search').value = '';
+  const titles = { dashboard:'Dashboard', clientes:'Clientes', pedidos:'Pedidos', pagamentos:'Pagamentos', produtos:'Produtos' };
+  document.getElementById('section-title').textContent = titles[secao] || secao;
+}
 
-    <!-- Aba de Entregas -->
-    <div id="entregas" class="tab-content active">
-      <table>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Cliente</th>
-            <th>Status da Entrega</th>
-            <th>Valor Total</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-entregas"></tbody>
-      </table>
-    </div>
+/* ==================== BUSCA GLOBAL ==================== */
+function buscaGlobal(valor) {
+  const secao = document.querySelector('.section.active')?.id;
+  if (!secao) return;
+  if (secao === 'section-clientes') {
+    document.getElementById('filtro-cliente').value = valor;
+    renderClientes();
+  } else if (secao === 'section-pedidos') {
+    document.getElementById('filtro-pedido').value = valor;
+    renderPedidos();
+  } else if (secao === 'section-pagamentos') {
+    document.getElementById('filtro-pagamento').value = valor;
+    renderPagamentos();
+  } else if (secao === 'section-produtos') {
+    document.getElementById('filtro-produto').value = valor;
+    renderProdutos();
+  }
+}
 
-    <!-- Aba de Pagamentos -->
-    <div id="pagamentos" class="tab-content">
-      <table>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Cliente</th>
-            <th>Mês</th>
-            <th>Valor</th>
-            <th>Situação</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-pagamentos"></tbody>
-      </table>
-    </div>
+/* ==================== CARREGAR ADMIN ==================== */
+function carregarAdmin() {
+  renderDashboard();
+  renderClientes();
+  renderPedidos();
+  renderPagamentos();
+  renderProdutos();
+}
 
-  </div>
-
-  <script src="../pedidos.js"></script>
-  <script>
-    
-
-    function calcularTotal(itens) {
-      return itens.reduce((total, item) => total + item.quantidade * item.valorUnitario, 0);
-    }
-
-    function login() {
-      const usuario = document.getElementById("usuario").value.trim().toLowerCase();
-      const senha = document.getElementById("senha").value.trim().toLowerCase();
-      const erro = document.getElementById("erro-login");
-
-      if (usuario === "leonardo" && senha === "fernanda") {
-        document.getElementById("login-box").classList.add("hidden");
-        document.getElementById("conteudo").classList.remove("hidden");
-        carregarPedidos();
-      } else {
-        erro.textContent = "Usuário ou senha incorretos.";
+/* ==================== DASHBOARD ==================== */
+function renderDashboard() {
+  const totalPedidos = pedidos.length;
+  const receitaTotal = pedidos.reduce((t, p) => t + calcTotal(p.itens), 0);
+  let pendenteValor = 0, pendenteQtd = 0;
+  pedidos.forEach(p => {
+    p.pagamentos.forEach(pg => {
+      if (pg.status === 'Em Aberto' || pg.status === 'Atrasado') {
+        pendenteValor += pg.valor;
+        pendenteQtd++;
       }
-    }
+    });
+  });
 
-    function mostrarAba(id, event) {
-      const abas = document.querySelectorAll(".tab-content");
-      const botoes = document.querySelectorAll(".tab-button");
-      abas.forEach(aba => aba.classList.remove("active"));
-      botoes.forEach(botao => botao.classList.remove("active"));
+  document.getElementById('dashboard-metrics').innerHTML = `
+    <div class="metric-card">
+      <div class="label">Total de Pedidos</div>
+      <div class="value">${totalPedidos}</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Receita Total</div>
+      <div class="value">${fmtValor(receitaTotal)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="label">Pagamentos Pendentes</div>
+      <div class="value">${fmtValor(pendenteValor)}</div>
+      <div class="sub">${pendenteQtd} parcelas</div>
+    </div>
+  `;
 
-      document.getElementById(id).classList.add("active");
-      event.target.classList.add("active");
-    }
+  const pedidosHtml = `
+    <table>
+      <thead><tr><th>Código</th><th>Cliente</th><th>Status</th><th>Valor</th></tr></thead>
+      <tbody>${pedidos.slice().reverse().slice(0,5).map(p => `
+        <tr class="clickable" onclick="expandirPedido(${p.code},this)">
+          <td>${p.code}</td><td>${p.nome}</td>
+          <td><span class="badge ${statusClass(p.status)}">${p.status}</span></td>
+          <td>${fmtValor(calcTotal(p.itens))}</td>
+        </tr>
+      `).join('')}</tbody>
+    </table>`;
+  document.getElementById('dashboard-pedidos').innerHTML = pedidosHtml;
 
-    function carregarPedidos() {
-      const tabelaEntregas = document.getElementById("tabela-entregas");
-      const tabelaPagamentos = document.getElementById("tabela-pagamentos");
+  let pagHtml = `<table><thead><tr><th>Cliente</th><th>Mês</th><th>Valor</th><th>Status</th></tr></thead><tbody>`;
+  pedidos.forEach(p => {
+    p.pagamentos.forEach(pg => {
+      pagHtml += `<tr><td>${p.nome}</td><td>${pg.mes}</td><td>${fmtValor(pg.valor)}</td><td><span class="badge ${statusClass(pg.status)}">${pg.status}</span></td></tr>`;
+    });
+  });
+  pagHtml += '</tbody></table>';
+  document.getElementById('dashboard-pagamentos').innerHTML = pagHtml;
+}
 
-      pedidos.forEach(pedido => {
-        // Entregas
-        const trEntrega = document.createElement("tr");
-        const statusClass = pedido.status.toLowerCase() === "entregue"
-          ? "status-entregue"
-          : pedido.status.toLowerCase() === "atrasado"
-            ? "status-atrasado"
-            : "status-pendente";
+/* ==================== CLIENTES ==================== */
+let clienteSort = { key: null, asc: true };
+function renderClientes() {
+  const filtro = (document.getElementById('filtro-cliente').value || '').toLowerCase();
+  let lista = [...clientes];
+  if (filtro) lista = lista.filter(c => c.nome.toLowerCase().includes(filtro));
+  if (clienteSort.key) {
+    lista.sort((a,b) => {
+      let v = (a[clienteSort.key]||'').toString().localeCompare((b[clienteSort.key]||'').toString());
+      return clienteSort.asc ? v : -v;
+    });
+  }
+  const tbody = document.getElementById('tabela-clientes');
+  tbody.innerHTML = lista.map(c => `
+    <tr class="clickable" onclick="expandirCliente(${c.id},this)">
+      <td>${c.nome}</td><td>${c.telefone}</td><td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.endereco}</td><td>${c.frete === 0 ? 'Grátis' : fmtValor(c.frete)}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="event.stopPropagation();excluirCliente(${c.id})">Excluir</button></td>
+    </tr>
+    <tr class="expanded-row" id="cliente-expand-${c.id}">
+      <td colspan="5">
+        <div class="expand-inner">
+          <h3>Editar Cliente</h3>
+          <div class="field"><label>Nome</label><input type="text" id="cliente-edit-nome-${c.id}" value="${c.nome}"></div>
+          <div class="field"><label>Telefone</label><input type="text" id="cliente-edit-tel-${c.id}" value="${c.telefone}"></div>
+          <div class="field"><label>Endereço</label><input type="text" id="cliente-edit-end-${c.id}" value="${c.endereco}"></div>
+          <div class="field"><label>Frete (R$)</label><input type="number" id="cliente-edit-frete-${c.id}" value="${c.frete}" step="0.01"></div>
+          <div class="field">
+            <button class="btn btn-accent btn-sm" onclick="salvarCliente(${c.id})">Salvar</button>
+            <button class="btn btn-outline btn-sm" onclick="fecharExpand('cliente-expand-${c.id}')">Cancelar</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function ordenarClientes(key) {
+  if (clienteSort.key === key) clienteSort.asc = !clienteSort.asc;
+  else { clienteSort.key = key; clienteSort.asc = true; }
+  renderClientes();
+}
+function expandirCliente(id, el) {
+  const row = document.getElementById('cliente-expand-'+id);
+  const open = row.classList.contains('open');
+  document.querySelectorAll('.expanded-row.open').forEach(r => r.classList.remove('open'));
+  if (!open) row.classList.add('open');
+}
+function salvarCliente(id) {
+  const c = clientes.find(x => x.id === id);
+  if (!c) return;
+  c.nome = document.getElementById('cliente-edit-nome-'+id).value;
+  c.telefone = document.getElementById('cliente-edit-tel-'+id).value;
+  c.endereco = document.getElementById('cliente-edit-end-'+id).value;
+  c.frete = parseFloat(document.getElementById('cliente-edit-frete-'+id).value) || 0;
+  renderClientes();
+  fecharExpand('cliente-expand-'+id);
+}
+function excluirCliente(id) {
+  if (!confirm('Excluir cliente?')) return;
+  const idx = clientes.findIndex(c => c.id === id);
+  if (idx > -1) clientes.splice(idx, 1);
+  renderClientes();
+}
+function novoCliente() {
+  const novoId = Math.max(...clientes.map(c=>c.id), 0) + 1;
+  clientes.push({ id: novoId, nome: 'Novo Cliente', telefone: '', endereco: '', frete: 0 });
+  renderClientes();
+  setTimeout(() => {
+    const row = document.getElementById('cliente-expand-'+novoId);
+    if (row) row.classList.add('open');
+  }, 50);
+}
+function fecharExpand(id) {
+  document.getElementById(id)?.classList.remove('open');
+}
 
-        trEntrega.innerHTML = `
-          <td>${pedido.code}</td>
-          <td>${pedido.nome}</td>
-          <td class="${statusClass}">${pedido.status}</td>
-          <td>R$ ${calcularTotal(pedido.itens).toFixed(2)}</td>
-          <td><a href="https://seusite.com/pedido?cod=${pedido.cod}" target="_blank">🔗 Ver</a></td>
-        `;
-        tabelaEntregas.appendChild(trEntrega);
+/* ==================== PEDIDOS ==================== */
+let pedidoSort = { key: null, asc: true };
+function renderPedidos() {
+  const filtro = (document.getElementById('filtro-pedido').value || '').toLowerCase();
+  const statusFiltro = document.getElementById('filtro-status-pedido').value;
+  let lista = [...pedidos];
+  if (filtro) lista = lista.filter(p => p.code.toString().includes(filtro) || p.nome.toLowerCase().includes(filtro));
+  if (statusFiltro) lista = lista.filter(p => p.status === statusFiltro);
+  if (pedidoSort.key) {
+    lista.sort((a,b) => {
+      let v = 0;
+      if (pedidoSort.key === 'code') v = a.code - b.code;
+      else if (pedidoSort.key === 'nome') v = a.nome.localeCompare(b.nome);
+      else if (pedidoSort.key === 'data') v = (a.data||'').localeCompare(b.data||'');
+      else if (pedidoSort.key === 'valor') v = calcTotal(a.itens) - calcTotal(b.itens);
+      return pedidoSort.asc ? v : -v;
+    });
+  }
+  const tbody = document.getElementById('tabela-pedidos');
+  tbody.innerHTML = lista.map(p => `
+    <tr class="clickable" onclick="expandirPedido(${p.code},this)">
+      <td>${p.code}</td><td>${p.nome}</td><td>${fmtData(p.data)}</td>
+      <td><span class="badge ${statusClass(p.status)}">${p.status}</span></td>
+      <td>${fmtValor(calcTotal(p.itens))}</td>
+    </tr>
+    <tr class="expanded-row" id="pedido-expand-${p.code}">
+      <td colspan="5">
+        <div class="expand-inner">
+          <h3>Detalhes do Pedido #${p.code}</h3>
+          ${(function(){
+            const cli = nomeCliente(p.nome);
+            return cli ? `
+              <div class="field"><label>Cliente</label><span>${cli.nome} — ${cli.telefone}</span></div>
+              <div class="field"><label>Endereço</label><span>${cli.endereco}</span></div>
+            ` : `<div class="field"><label>Cliente</label><span>${p.nome}</span></div>`;
+          })()}
+          <div class="field"><label>Data</label><input type="date" id="pedido-edit-data-${p.code}" value="${p.data||''}"></div>
+          <div class="field"><label>Status</label>
+            <select id="pedido-edit-status-${p.code}">
+              <option ${p.status==='Pendente'?'selected':''}>Pendente</option>
+              <option ${p.status==='Em Entrega'?'selected':''}>Em Entrega</option>
+              <option ${p.status==='Entregue'?'selected':''}>Entregue</option>
+              <option ${p.status==='Atrasado'?'selected':''}>Atrasado</option>
+            </select>
+          </div>
+          <table class="mini-table">
+            <thead><tr><th>Item</th><th>Tam</th><th>Qtd</th><th>Valor Un.</th><th>Total</th></tr></thead>
+            <tbody>${p.itens.map(i => `
+              <tr>
+                <td>${i.item}</td><td>${i.tamanho}</td><td>${i.quantidade}</td>
+                <td>${fmtValor(i.valorUnitario)}</td><td>${fmtValor(i.quantidade * i.valorUnitario)}</td>
+              </tr>
+            `).join('')}
+            <tr style="font-weight:700"><td colspan="4" style="text-align:right">Subtotal</td><td>${fmtValor(calcTotal(p.itens))}</td></tr>
+            </tbody>
+          </table>
+          <div class="field" style="margin-top:var(--space-xs)">
+            <button class="btn btn-accent btn-sm" onclick="salvarPedido(${p.code})">Salvar Alterações</button>
+            <button class="btn btn-outline btn-sm" onclick="fecharExpand('pedido-expand-${p.code}')">Cancelar</button>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+function ordenarPedidos(key) {
+  if (pedidoSort.key === key) pedidoSort.asc = !pedidoSort.asc;
+  else { pedidoSort.key = key; pedidoSort.asc = true; }
+  renderPedidos();
+}
+function expandirPedido(code, el) {
+  const row = document.getElementById('pedido-expand-'+code);
+  const open = row.classList.contains('open');
+  document.querySelectorAll('.expanded-row.open').forEach(r => r.classList.remove('open'));
+  if (!open) row.classList.add('open');
+}
+function salvarPedido(code) {
+  const p = pedidos.find(x => x.code === code);
+  if (!p) return;
+  p.data = document.getElementById('pedido-edit-data-'+code).value;
+  p.status = document.getElementById('pedido-edit-status-'+code).value;
+  renderPedidos();
+  renderDashboard();
+  fecharExpand('pedido-expand-'+code);
+}
 
-        // Pagamentos
-        pedido.pagamentos.forEach(pag => {
-          const trPag = document.createElement("tr");
-          const statusClassPag = pag.status === "Pago"
-            ? "status-entregue"
-            : pag.status === "Atrasado"
-              ? "status-atrasado"
-              : "status-pendente";
+/* ==================== PAGAMENTOS ==================== */
+let pagamentoSort = { key: null, asc: true };
+function renderPagamentos() {
+  const filtro = (document.getElementById('filtro-pagamento').value || '').toLowerCase();
+  const statusFiltro = document.getElementById('filtro-status-pagamento').value;
+  let parcelas = [];
+  pedidos.forEach(p => {
+    p.pagamentos.forEach(pg => {
+      parcelas.push({ code: p.code, cliente: p.nome, mes: pg.mes, valor: pg.valor, status: pg.status, ref: pg });
+    });
+  });
+  if (filtro) parcelas = parcelas.filter(x => x.cliente.toLowerCase().includes(filtro));
+  if (statusFiltro) parcelas = parcelas.filter(x => x.status === statusFiltro);
+  if (pagamentoSort.key) {
+    parcelas.sort((a,b) => {
+      let v = 0;
+      if (pagamentoSort.key === 'mes') v = a.mes.localeCompare(b.mes);
+      else if (pagamentoSort.key === 'valor') v = a.valor - b.valor;
+      return pagamentoSort.asc ? v : -v;
+    });
+  }
 
-          trPag.innerHTML = `
-            <td>${pedido.code}</td>
-            <td>${pedido.nome}</td>
-            <td>${pag.mes}</td>
-            <td>R$ ${pag.valor.toFixed(2)}</td>
-            <td class="${statusClassPag}">${pag.status}</td>
-          `;
-          tabelaPagamentos.appendChild(trPag);
-        });
-      });
-    }
-  </script>
+  const totalRecebido = parcelas.filter(x => x.status === 'Pago').reduce((t,x) => t + x.valor, 0);
+  const totalPendente = parcelas.filter(x => x.status === 'Em Aberto').reduce((t,x) => t + x.valor, 0);
+  const totalAtrasado = parcelas.filter(x => x.status === 'Atrasado').reduce((t,x) => t + x.valor, 0);
+  document.getElementById('resumo-pagamentos').innerHTML = `
+    <div class="metric-card"><div class="label">Recebido</div><div class="value" style="color:var(--success)">${fmtValor(totalRecebido)}</div></div>
+    <div class="metric-card"><div class="label">Pendente</div><div class="value" style="color:var(--warning)">${fmtValor(totalPendente)}</div></div>
+    <div class="metric-card"><div class="label">Atrasado</div><div class="value" style="color:var(--danger)">${fmtValor(totalAtrasado)}</div></div>
+  `;
 
+  const tbody = document.getElementById('tabela-pagamentos');
+  tbody.innerHTML = parcelas.map(x => `
+    <tr>
+      <td>${x.code}</td><td>${x.cliente}</td><td>${x.mes}</td><td>${fmtValor(x.valor)}</td>
+      <td><span class="badge ${statusClass(x.status)} status-toggle" onclick="toggleStatusPag(this,'${x.code}','${x.mes}')">${x.status}</span></td>
+    </tr>
+  `).join('');
+}
+function ordenarPagamentos(key) {
+  if (pagamentoSort.key === key) pagamentoSort.asc = !pagamentoSort.asc;
+  else { pagamentoSort.key = key; pagamentoSort.asc = true; }
+  renderPagamentos();
+}
+function toggleStatusPag(el, code, mes) {
+  const p = pedidos.find(x => x.code == code);
+  if (!p) return;
+  const pg = p.pagamentos.find(x => x.mes === mes);
+  if (!pg) return;
+  const ordem = ['Pago', 'Em Aberto', 'Atrasado'];
+  const idx = ordem.indexOf(pg.status);
+  pg.status = ordem[(idx + 1) % ordem.length];
+  renderPagamentos();
+  renderDashboard();
+}
+
+/* ==================== PRODUTOS ==================== */
+let produtoSort = { key: null, asc: true };
+function renderProdutos() {
+  const filtro = (document.getElementById('filtro-produto').value || '').toLowerCase();
+  let lista = [...produtos];
+  if (filtro) lista = lista.filter(p => p.nome.toLowerCase().includes(filtro));
+  if (produtoSort.key) {
+    lista.sort((a,b) => {
+      let v = a.nome.localeCompare(b.nome);
+      return produtoSort.asc ? v : -v;
+    });
+  }
+  const grid = document.getElementById('grid-produtos');
+  grid.innerHTML = lista.map(prod => `
+    <div class="prod-card" onclick="expandirProduto(${prod.id})">
+      <img src="${prod.imagem}" alt="${prod.nome}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22><rect fill=%22%23eee%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2220%22>Sem imagem</text></svg>'">
+      <div class="prod-body">
+        <h3>${prod.nome}</h3>
+        <div class="cores">${prod.cores.map(c => `<span class="color-swatch" style="background:${c.hash}" title="${c.nome}"></span>`).join('')}</div>
+        <div class="tamanhos">${prod.tamanhos.map(t => `<span>${t}</span>`).join('')}</div>
+        <div id="prod-edit-${prod.id}" class="hidden" style="margin-top:var(--space-xs);border-top:1px solid var(--border);padding-top:var(--space-xs)">
+          <div class="field"><label>Nome</label><input type="text" id="prod-nome-${prod.id}" value="${prod.nome}"></div>
+          <div class="field"><label>Imagem URL</label><input type="text" id="prod-img-${prod.id}" value="${prod.imagem}"></div>
+          <div class="field"><label>Cores (nome,hash)</label><input type="text" id="prod-cores-${prod.id}" value="${prod.cores.map(c => c.nome+','+c.hash).join(';')}" placeholder="Preto,#000;Branco,#FFF"></div>
+          <div class="field"><label>Tamanhos</label><input type="text" id="prod-tam-${prod.id}" value="${prod.tamanhos.join(',')}" placeholder="P,M,G,GG"></div>
+          <div class="field">
+            <button class="btn btn-accent btn-sm" onclick="salvarProduto(${prod.id})">Salvar</button>
+            <button class="btn btn-outline btn-sm" onclick="fecharProdEdit(${prod.id})">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function expandirProduto(id) {
+  document.querySelectorAll('[id^="prod-edit-"]').forEach(el => el.classList.add('hidden'));
+  const el = document.getElementById('prod-edit-'+id);
+  if (el) el.classList.remove('hidden');
+}
+function fecharProdEdit(id) {
+  document.getElementById('prod-edit-'+id)?.classList.add('hidden');
+}
+function salvarProduto(id) {
+  const prod = produtos.find(p => p.id === id);
+  if (!prod) return;
+  prod.nome = document.getElementById('prod-nome-'+id).value;
+  prod.imagem = document.getElementById('prod-img-'+id).value;
+  const coresStr = document.getElementById('prod-cores-'+id).value;
+  prod.cores = coresStr.split(';').filter(Boolean).map(s => {
+    const [nome, hash] = s.split(',');
+    return { nome: nome.trim(), hash: (hash||'#000').trim() };
+  });
+  prod.tamanhos = document.getElementById('prod-tam-'+id).value.split(',').map(s => s.trim()).filter(Boolean);
+  renderProdutos();
+}
+</script>
 </body>
 </html>

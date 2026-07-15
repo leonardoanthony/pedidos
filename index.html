@@ -4,85 +4,161 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
   <title>Consulta de Pedido</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #111111;
+      --primary-light: #2C2C2C;
+      --secondary: #F5F5F5;
+      --background: #FFFFFF;
+      --accent: #6A8D73;
+      --accent-dark: #57715D;
+      --text: #111111;
+      --text-light: #666666;
+      --border: #E9E9E9;
+      --success: #30B566;
+      --warning: #F2B544;
+      --danger: #E45D5D;
+      --radius-xs: 6px;
+      --radius-sm: 10px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 32px;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
+      --shadow-md: 0 10px 30px rgba(0,0,0,.08);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.12);
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 40px;
+      --space-xl: 64px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background: #f5f5f5;
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+      color: var(--text);
+      padding: var(--space-lg) var(--space-sm);
     }
 
     .container {
       max-width: 700px;
       margin: auto;
       background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
     }
 
     h2 {
       text-align: center;
-      color: #333;
+      color: var(--text);
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: var(--space-md);
     }
 
     input[type="text"] {
-      width: calc(100% - 24px);
-      padding: 12px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 100%;
+      padding: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     button {
       width: 100%;
-      padding: 12px;
-      background-color: #007BFF;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--primary);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 999px;
       cursor: pointer;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      transition: .25s;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background: var(--primary-light);
     }
 
     .not-found {
-      color: red;
+      color: var(--danger);
       text-align: center;
-      margin-top: 15px;
+      margin-top: var(--space-sm);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      margin-top: var(--space-sm);
     }
 
     th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
+      border: 1px solid var(--border);
+      padding: var(--space-xs) var(--space-sm);
       text-align: center;
     }
 
     th {
-      background-color: #f0f0f0;
-      font-weight: bold;
+      background-color: var(--secondary);
+      font-weight: 600;
     }
 
     .subtotal {
       text-align: right;
-      font-weight: bold;
-      margin-top: 10px;
+      font-weight: 700;
+      margin-top: var(--space-sm);
+      font-size: 18px;
     }
 
     .status {
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: var(--space-md);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .badge.success {
+      background: #EAF8EF;
+      color: var(--success);
+    }
+
+    .badge.warning {
+      background: #FFF7E6;
+      color: var(--warning);
+    }
+
+    .badge.danger {
+      background: #FFECEC;
+      color: var(--danger);
     }
 
     .pagamentos-table {
-      margin-top: 10px;
+      margin-top: var(--space-sm);
     }
 
     .pagamentos-table td {
@@ -90,17 +166,18 @@
     }
 
     #pix {
-      margin-top: 20px;
+      margin-top: var(--space-md);
       font-size: 14px;
       text-align: center;
-      color: #555;
+      color: var(--text-light);
     }
 
     #copyPix {
       cursor: pointer;
-      color: #007BFF;
+      color: var(--accent);
       text-decoration: underline;
     }
+
     .overflow-x-scroll {
       overflow-x: scroll;
     }
@@ -119,7 +196,12 @@
 
   <script src="pedidos.js"></script>
   <script>
-    
+    function getStatusClass(status) {
+      const s = status.toLowerCase();
+      if (s === 'entregue' || s === 'pago') return 'success';
+      if (s === 'atrasado' || s === 'em aberto') return 'danger';
+      return 'warning';
+    }
 
     function buscarPedido() {
       const code = document.getElementById('nameInput').value.trim();
@@ -181,17 +263,17 @@
               <tr>
                 <td>${p.mes}</td>
                 <td>R$ ${p.valor.toFixed(2)}</td>
-                <td>${p.status}</td>
+                <td><span class="badge ${getStatusClass(p.status)}">${p.status}</span></td>
               </tr>`).join('')}
           </tbody>
         </table>
       `;
 
       resultadoDiv.innerHTML = `
-        <h3>🧾 Nota de Pedido – ${pedido.nome}</h3>
+        <h3 style="margin-top: var(--space-md); font-size: 24px; font-weight: 600;">Nota de Pedido – ${pedido.nome}</h3>
         ${tabelaItens}
-        <p class="status">📦 Status do Pedido: ${pedido.status}</p>
-        <h4>💳 Pagamentos:</h4>
+        <p class="status">Status do Pedido: <span class="badge ${getStatusClass(pedido.status)}">${pedido.status}</span></p>
+        <h4 style="margin-top: var(--space-md); font-size: 18px; font-weight: 600;">Pagamentos:</h4>
         ${tabelaPagamentos}
       `;
     }
