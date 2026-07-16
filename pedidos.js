@@ -2,7 +2,7 @@ const pedidos = [
   {
     code: 1212,
     nome: "Edgard",
-    data: "2026-08-01",
+    data: "2026-07-14",
     status: "Entregue",
     itens: [
         { item: "Pack Camisa 3 Unidades", tamanho: "GG", quantidade: 1, valorUnitario: 90 },
@@ -18,75 +18,34 @@ const pedidos = [
       ]
     },
   {
-    code: 2301,
-    nome: "Mariana",
-    data: "2026-08-15",
-    status: "Em Entrega",
+    code: 0002,
+    nome: "Robson",
+    data: "2026-07-16",
+    status: "Em separação",
     itens: [
-      { item: "Camisa Oversized", tamanho: "G", quantidade: 2, valorUnitario: 79 },
-      { item: "Boné Aba Reta", tamanho: "Único", quantidade: 1, valorUnitario: 49 },
-      { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 15 }
+      { item: "Camisa Viscose - Bege", tamanho: "G", quantidade: 1, valorUnitario: 30 },
+      { item: "Camisa Viscose - Bordo", tamanho: "G", quantidade: 1, valorUnitario: 30 },
+      { item: "Camisa Viscose - Vermelha", tamanho: "GG", quantidade: 1, valorUnitario: 30 },
+      { item: "Camisa Viscose - Azul Marinho", tamanho: "GG", quantidade: 1, valorUnitario: 30 },
+      { item: "Camisa Algodão - Verde", tamanho: "G", quantidade: 1, valorUnitario: 40 },
+      { item: "Camisa Algodão - Preto", tamanho: "GG", quantidade: 1, valorUnitario: 40 },
     ],
     pagamentos: [
-      { mes: "Agosto", valor: 103.50, status: "Pago" },
-      { mes: "Setembro", valor: 103.50, status: "Em Aberto" }
+      { mes: "Agosto", valor: 100, status: "Em Aberto" },
+      { mes: "Setembro", valor: 100, status: "Em Aberto" }
     ]
   },
   {
-    code: 3456,
-    nome: "Rafael",
+    code: 0003,
+    nome: "Shalom",
     data: "2026-07-20",
-    status: "Pendente",
+    status: "Aguardando Coleta",
     itens: [
-      { item: "Calça Cargo", tamanho: "M", quantidade: 1, valorUnitario: 149 },
-      { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 12 }
+      { item: "Pack Camisa 3 Unidades", tamanho: "M", quantidade: 1, valorUnitario: 90 },
     ],
     pagamentos: [
-      { mes: "Agosto", valor: 80.50, status: "Em Aberto" },
-      { mes: "Setembro", valor: 80.50, status: "Em Aberto" }
+      { mes: "Julho", valor: 90, status: "Em Aberto" },
     ]
   },
-  {
-    code: 4567,
-    nome: "Edgard",
-    data: "2026-09-01",
-    status: "Atrasado",
-    itens: [
-      { item: "Moletom Canguru", tamanho: "GG", quantidade: 1, valorUnitario: 189 },
-      { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 10 }
-    ],
-    pagamentos: [
-      { mes: "Setembro", valor: 99.50, status: "Atrasado" },
-      { mes: "Outubro", valor: 99.50, status: "Em Aberto" }
-    ]
-  },
-  {
-    code: 5678,
-    nome: "Amanda",
-    data: "2026-07-10",
-    status: "Entregue",
-    itens: [
-      { item: "Regata Masculina", tamanho: "P", quantidade: 3, valorUnitario: 39 },
-      { item: "Meia Cano Alto", tamanho: "41-44", quantidade: 2, valorUnitario: 29 },
-      { item: "Frete", tamanho: "", quantidade: 0, valorUnitario: 0 }
-    ],
-    pagamentos: [
-      { mes: "Julho", valor: 175, status: "Pago" }
-    ]
-  },
-  {
-    code: 6789,
-    nome: "Lucas",
-    data: "2026-09-10",
-    status: "Pendente",
-    itens: [
-      { item: "Sapato New Balance - Bege", tamanho: "42", quantidade: 1, valorUnitario: 299 },
-      { item: "Meia Cano Alto", tamanho: "41-44", quantidade: 3, valorUnitario: 29 },
-      { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 10 }
-    ],
-    pagamentos: [
-      { mes: "Setembro", valor: 198, status: "Em Aberto" },
-      { mes: "Outubro", valor: 198, status: "Em Aberto" }
-    ]
-  }
+
 ];
