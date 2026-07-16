@@ -18,7 +18,7 @@ const pedidos = [
       ]
     },
   {
-    code: 0002,
+    code: 4612,
     nome: "Robson",
     data: "2026-07-16",
     status: "Em separação",
@@ -36,7 +36,7 @@ const pedidos = [
     ]
   },
   {
-    code: 0003,
+    code: 2631,
     nome: "Shalom",
     data: "2026-07-20",
     status: "Aguardando Coleta",
