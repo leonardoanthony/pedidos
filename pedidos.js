@@ -47,5 +47,4 @@ const pedidos = [
       { mes: "Julho", valor: 90, status: "Em Aberto" },
     ]
   },
-
 ];
