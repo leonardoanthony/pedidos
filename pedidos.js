@@ -68,4 +68,18 @@ const pedidos = [
       { mes: "Janeiro", valor: 100, status: "Em Aberto" },
     ]
   },
+  {
+    code: 5316,
+    nome: "Kevin",
+    data: "2026-07-28",
+    status: "Entregue",
+    itens: [
+        { item: "Camisa Algodão - Preto", tamanho: "GG", quantidade: 1, valorUnitario: 40 },
+        { item: "Camisa Algodão - Preta", tamanho: "GG", quantidade: 1, valorUnitario: 40 },
+      ],
+      pagamentos: [
+        { mes: "Agosto", valor: 40, status: "Em Aberto" },
+        { mes: "Setembro", valor: 40, status: "Em Aberto" }
+      ]
+    },
 ];
