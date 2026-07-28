@@ -47,4 +47,25 @@ const pedidos = [
       { mes: "Julho", valor: 90, status: "Em Aberto" },
     ]
   },
+  {
+    code: 2347,
+    nome: "Sylvia",
+    data: "2026-07-28",
+    status: "Entre",
+    itens: [
+      { item: "Celular", tamanho: "", quantidade: 1, valorUnitario: 650 },
+      { item: "Cama", tamanho: "", quantidade: 1, valorUnitario: 650 },
+      { item: "Painel", tamanho: "", quantidade: 1, valorUnitario: 150 },
+      { item: "Bike", tamanho: "", quantidade: 1, valorUnitario: 450 },
+    ],
+    pagamentos: [
+      { mes: "Julho", valor: 325, status: "Pago" },
+      { mes: "Agosto", valor: 325, status: "Em Aberto" },
+      { mes: "Setembro", valor: 325, status: "Em Aberto" },
+      { mes: "Outubro", valor: 325, status: "Em Aberto" },
+      { mes: "Novembro", valor: 150, status: "Em Aberto" },
+      { mes: "Dezembro", valor: 150, status: "Em Aberto" },
+      { mes: "Janeiro", valor: 100, status: "Em Aberto" },
+    ]
+  },
 ];
