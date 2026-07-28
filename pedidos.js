@@ -51,7 +51,7 @@ const pedidos = [
     code: 2347,
     nome: "Sylvia",
     data: "2026-07-28",
-    status: "Entre",
+    status: "Entregue",
     itens: [
       { item: "Celular", tamanho: "", quantidade: 1, valorUnitario: 650 },
       { item: "Cama", tamanho: "", quantidade: 1, valorUnitario: 650 },
