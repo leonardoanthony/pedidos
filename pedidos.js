@@ -31,8 +31,8 @@ const pedidos = [
       { item: "Camisa Algodão - Preto", tamanho: "GG", quantidade: 1, valorUnitario: 40 },
     ],
     pagamentos: [
-      { mes: "Agosto", valor: 100, status: "Em Aberto" },
-      { mes: "Setembro", valor: 100, status: "Em Aberto" }
+      { mes: "Julho", valor: 100, status: "Pago" },
+      { mes: "Agosto", valor: 100, status: "Em Aberto" }
     ]
   },
   {
