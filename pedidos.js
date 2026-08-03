@@ -39,12 +39,12 @@ const pedidos = [
     code: 2631,
     nome: "Shalom",
     data: "2026-07-20",
-    status: "Aguardando Coleta",
+    status: "Entregue",
     itens: [
       { item: "Pack Camisa 3 Unidades", tamanho: "M", quantidade: 1, valorUnitario: 90 },
     ],
     pagamentos: [
-      { mes: "Julho", valor: 90, status: "Em Aberto" },
+      { mes: "Julho", valor: 90, status: "Pago" },
     ]
   },
   {
