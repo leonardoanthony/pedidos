@@ -11,7 +11,7 @@ const pedidos = [
         { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 10 }
       ],
       pagamentos: [
-        { mes: "Agosto", valor: 85, status: "Em Aberto" },
+        { mes: "Agosto", valor: 85, status: "Pago" },
         { mes: "Setembro", valor: 85, status: "Em Aberto" },
         { mes: "Outubro", valor: 85, status: "Em Aberto" },
         { mes: "Novembro", valor: 85, status: "Em Aberto" }
@@ -31,8 +31,8 @@ const pedidos = [
       { item: "Camisa Algodão - Preto", tamanho: "GG", quantidade: 1, valorUnitario: 40 },
     ],
     pagamentos: [
-      { mes: "Julho", valor: 100, status: "Pago" },
-      { mes: "Agosto", valor: 100, status: "Em Aberto" }
+      { mes: "Agosto", valor: 100, status: "Pago" },
+      { mes: "Setembro", valor: 100, status: "Em Aberto" }
     ]
   },
   {
