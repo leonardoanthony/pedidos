@@ -57,13 +57,15 @@ const pedidos = [
       { item: "Cama", tamanho: "", quantidade: 1, valorUnitario: 650 },
       { item: "Painel", tamanho: "", quantidade: 1, valorUnitario: 150 },
       { item: "Frete", tamanho: "", quantidade: 1, valorUnitario: 29.35 },
+      { item: "Camisas Brasil", tamanho: "", quantidade: 20, valorUnitario: 25 },
     ],
     pagamentos: [
       { mes: "Julho", valor: 325, status: "Pago" },
       { mes: "Agosto", valor: 325, status: "Em Aberto" },
       { mes: "Setembro", valor: 325, status: "Em Aberto" },
       { mes: "Outubro", valor: 325, status: "Em Aberto" },
-      { mes: "Novembro", valor: 179.35, status: "Em Aberto" },
+      { mes: "Novembro", valor: 500, status: "Em Aberto" },
+      { mes: "Dezembro", valor: 179.35, status: "Em Aberto" },
     ]
   },
 ];
