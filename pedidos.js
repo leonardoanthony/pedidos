@@ -61,7 +61,7 @@ const pedidos = [
     ],
     pagamentos: [
       { mes: "Julho", valor: 325, status: "Pago" },
-      { mes: "Agosto", valor: 325, status: "Em Aberto" },
+      { mes: "Agosto", valor: 325, status: "Pago" },
       { mes: "Setembro", valor: 325, status: "Em Aberto" },
       { mes: "Outubro", valor: 325, status: "Em Aberto" },
       { mes: "Novembro", valor: 500, status: "Em Aberto" },
